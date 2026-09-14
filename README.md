@@ -1,25 +1,23 @@
-# The Growth Basket — Full Website + Backend
+# The Growth Basket — Vercel Live Version
 
-This version keeps the premium frontend and adds a lightweight production-ready Node.js backend with no third-party npm packages.
+Premium responsive website with clickable service/channel/process details, a contact enquiry form, a protected admin dashboard, CSV export, and PostgreSQL lead storage.
 
-## Included
-- Your Growth Basket logo in header, footer and favicon.
-- Clickable Services, Platforms and Growth Process cards with detailed information modals.
-- Working navigation, WhatsApp, phone and email links.
-- Contact form connected to `POST /api/leads` and persisted in `data/leads.json`.
-- Admin lead dashboard at `/admin?token=YOUR_ADMIN_TOKEN`.
-- Health endpoint at `/api/health`.
-- Responsive mobile layout.
+## Deploy on Vercel
 
-## Run locally
-1. Install Node.js 18+.
-2. Open this folder in Terminal/Command Prompt.
-3. Run: `node server.js`
-4. Open: `http://localhost:3000`
-5. Admin: `http://localhost:3000/admin?token=growthbasket-admin-change-me`
+1. Import this GitHub repository into Vercel.
+2. Keep **Application Preset: Node** and **Root Directory: `./`**.
+3. Create/connect a Postgres database from Vercel Marketplace (Neon/Postgres) and make sure `POSTGRES_URL` is available to the project.
+4. Add an Environment Variable named `ADMIN_TOKEN` with a long random secret. Apply it to Production (and Preview if desired).
+5. Deploy.
+6. Admin dashboard: `/api/admin?token=YOUR_ADMIN_TOKEN`.
+7. After the first successful enquiry or admin visit, the `leads` table is created automatically.
 
-## Production
-Set a strong `ADMIN_TOKEN` environment variable before starting the server. For example:
-`ADMIN_TOKEN="use-a-long-random-secret" node server.js`
+## Local
 
-For a production deployment, put the app behind HTTPS and use a real database (PostgreSQL/MySQL) and transactional email provider if you want automatic email notifications.
+`npm install`
+
+Set `POSTGRES_URL` and `ADMIN_TOKEN`, then:
+
+`npm start`
+
+The browser website is served by `server.js` locally; the `api/` files are the production Vercel serverless endpoints.

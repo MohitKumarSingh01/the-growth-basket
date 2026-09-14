@@ -1,62 +1,32 @@
-# The Growth Basket — Live Deployment Guide
+# Vercel deployment — The Growth Basket
 
-This package is ready for Node.js hosting. It includes the frontend, backend, protected admin dashboard, lead storage, CSV export, health check, Docker support and a Render deployment file.
+## 1. GitHub
+Push the complete project to the `main` branch.
 
-## Option 1 — cPanel / Hostinger / Any Node.js hosting
+## 2. Vercel
+Import `the-growth-basket` from GitHub.
+- Preset: Node
+- Root Directory: `./`
+- No build command is required for the static front end.
 
-1. Extract the ZIP and upload the contents of `the-growth-basket-full` to your Node.js application folder.
-2. Create a Node.js application in your hosting panel.
-3. Use Node.js 18 or newer (Node 20 recommended).
-4. Set the application startup file to `server.js` or the start command to `npm start`.
-5. Set an environment variable:
-   - `ADMIN_TOKEN` = a long random secret (at least 32 characters recommended).
-   - `NODE_ENV` = `production`.
-6. Run `npm install` if your hosting panel asks for dependencies.
-7. Start/restart the Node.js application.
-8. Point your domain/subdomain to the Node.js application using your hosting panel's domain/proxy settings.
-9. Open your domain in the browser. The homepage is served by `server.js`.
-10. Admin: `https://YOUR-DOMAIN.com/admin?token=YOUR_ADMIN_TOKEN`. After the first login, the token is stored only in an HttpOnly session cookie.
+## 3. Permanent lead storage
+Vercel serverless functions must not use a local JSON file as permanent storage. Connect a PostgreSQL database through the Vercel Marketplace (for example Neon/Postgres). Ensure the project receives `POSTGRES_URL`.
 
-### Important for lead storage
-The backend stores enquiries in `data/leads.json`. Your hosting must provide persistent storage for this folder. Do not deploy this app on a serverless-only platform without persistent storage or change the storage layer to a database.
+## 4. Environment variable
+Add:
+- `ADMIN_TOKEN` = a long random secret (Production)
 
-## Option 2 — Render
+Do not commit a real `.env` file or real secrets to GitHub.
 
-1. Put this project in a GitHub repository.
-2. Create a new Web Service on Render and connect the repository.
-3. Render can use the included `render.yaml` as a Blueprint.
-4. The service starts with `npm start`.
-5. The included persistent disk is mounted at `/var/data`; set `DATA_DIR=/var/data` in the service environment if Render does not apply it automatically.
-6. Set `ADMIN_TOKEN` to your own secret.
-7. Deploy and open the Render URL.
+## 5. Deploy
+Click Deploy. The site is served from `index.html`; the API endpoints are under `/api/`.
 
-## Option 3 — Docker VPS
+### Endpoints
+- `/api/health` — backend health check
+- `POST /api/leads` — contact form endpoint
+- `/api/admin?token=...` — protected admin dashboard
+- `/api/admin-export` — CSV export (requires admin cookie/token)
+- `/api/admin-data` — JSON lead data (requires admin cookie/token)
 
-Run:
-
-```bash
-docker compose up -d --build
-```
-
-Put Nginx/Caddy/another reverse proxy in front of port 3000 and enable HTTPS.
-
-## Backend endpoints
-
-- `GET /api/health` — server health check.
-- `POST /api/leads` — receives website enquiries.
-- `GET /api/leads` — protected lead API.
-- `GET /admin` — protected admin dashboard.
-- `GET /admin/export` — protected CSV export.
-- `GET /admin/logout` — ends the admin session.
-
-## Form flow
-
-Website contact form → `POST /api/leads` → validation + basic rate limiting + honeypot → persistent `data/leads.json` → admin dashboard/CSV.
-
-## Security checklist before launch
-
-- Replace `ADMIN_TOKEN` with a strong secret and never commit it to GitHub.
-- Use HTTPS on the public domain.
-- Keep the `data` directory writable by the Node process.
-- Back up `data/leads.json` regularly if you use file storage.
-- For high traffic, migrate leads to PostgreSQL/MySQL and add transactional email/CRM integration.
+## 6. Custom domain
+After deployment, open Vercel project → Settings → Domains → add your domain.
