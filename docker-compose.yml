@@ -1,0 +1,12 @@
+services:
+  growth-basket:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      ADMIN_TOKEN: change-this-to-a-long-random-secret
+      DATA_DIR: /app/data
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

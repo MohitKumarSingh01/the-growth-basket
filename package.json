@@ -1,0 +1,8 @@
+{
+  "name": "the-growth-basket-website",
+  "version": "2.0.0",
+  "private": true,
+  "description": "The Growth Basket premium website with production-ready Node.js lead backend",
+  "scripts": { "start": "node server.js", "dev": "node server.js" },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: the-growth-basket
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: ADMIN_TOKEN
+        generateValue: true
+    disk:
+      name: growth-basket-data
+      mountPath: /var/data
+      sizeGB: 1
