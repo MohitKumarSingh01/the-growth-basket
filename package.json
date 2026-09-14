@@ -4,8 +4,8 @@
   "private": true,
   "description": "The Growth Basket premium website with Vercel serverless backend and PostgreSQL lead storage",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node local-server.js",
+    "dev": "node local-server.js"
   },
   "engines": {
     "node": "24.x"
